@@ -13,15 +13,44 @@ An interactive maze game built with Python & pygame that generates a random weig
 - Live statistics: nodes visited, path cost, path length, elapsed time
 - Keyboard controls for interactivity
 
+## Requirements
+```bash
+pip install pygame
+```
+
+## How to Run
+```bash
+py -3.12 maze_pathfinder/maze_pathfinder.py
+```
+
 ## Controls
 | Key | Action |
 |-----|--------|
 | `SPACE` | Run / Pause the algorithm |
 | `R` | Generate a new random maze |
-| `W` | Toggle weight labels |
+| `W` | Toggle weight labels on cells |
 | `S` | Skip to final result instantly |
 | `ESC` | Quit |
 
-## Requirements
+## Algorithm
+Dijkstra's algorithm with a binary min-heap prioritizes the lowest-cost node at each step, guaranteeing the optimal shortest path in a weighted graph.
 
-## How to Run
+**Time complexity: O((V + E) log V)**
+
+## Graph Model
+- **Nodes** — each passable cell in the maze
+- **Edges** — horizontal/vertical adjacency between passable cells  
+- **Weights** — random integer 1–9 assigned to each destination cell
+
+## File Structure
+```
+EF234405_DAA_Q2_5025231176_Muhammad_Umar_Rusjanto/
+└── maze_pathfinder/
+    └── maze_pathfinder.py
+```
+
+## Demo
+![Maze Pathfinder Demo](https://i.imgur.com/placeholder.png)
+
+> Press **SPACE** to start Dijkstra, watch the blue visited cells expand,  
+> then see the gold path light up from S to E!
