@@ -48,9 +48,3 @@ EF234405_DAA_Q2_5025231176_Muhammad_Umar_Rusjanto/
 └── maze_pathfinder/
     └── maze_pathfinder.py
 ```
-
-## Demo
-![Maze Pathfinder Demo](https://i.imgur.com/placeholder.png)
-
-> Press **SPACE** to start Dijkstra, watch the blue visited cells expand,  
-> then see the gold path light up from S to E!
