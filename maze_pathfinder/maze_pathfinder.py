@@ -1,8 +1,3 @@
-"""
-Maze Pathfinder Game — Dijkstra's Algorithm Visualization
-EF234405 Design & Analysis of Algorithms — Quiz 2
-"""
-
 import pygame
 import heapq
 import random
@@ -10,7 +5,6 @@ import time
 import sys
 from enum import Enum
 
-# ─── Constants ─────────────────────────────────────────────────────────────────
 WINDOW_W, WINDOW_H = 1100, 720
 SIDE_PANEL_W = 260
 GRID_AREA_W = WINDOW_W - SIDE_PANEL_W
@@ -21,7 +15,6 @@ CELL = GRID_AREA_W // COLS   # cell pixel size
 FPS = 60
 VIZ_DELAY = 18               # ms between each Dijkstra step in animation
 
-# ─── Colours ───────────────────────────────────────────────────────────────────
 BG          = (10,  12,  20)
 WALL_COL    = (18,  22,  40)
 WALL_BORDER = (30,  40,  70)
@@ -38,7 +31,6 @@ TEXT_DIM    = (100, 120, 160)
 ACCENT      = (80,  160, 255)
 COST_COL    = (60, 200, 160)
 
-# ─── Cell types ────────────────────────────────────────────────────────────────
 class Cell(Enum):
     WALL     = 0
     FREE     = 1
@@ -48,15 +40,10 @@ class Cell(Enum):
     START    = 5
     END      = 6
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  Maze generator — Recursive Division (produces nice corridors)
-# ══════════════════════════════════════════════════════════════════════════════
 def generate_maze(cols: int, rows: int) -> list[list[Cell]]:
     """Returns a 2‑D grid of Cell values with a guaranteed solvable maze."""
     grid = [[Cell.FREE for _ in range(cols)] for _ in range(rows)]
 
-    # Border walls
     for r in range(rows):
         for c in range(cols):
             if r == 0 or r == rows - 1 or c == 0 or c == cols - 1:
@@ -69,7 +56,6 @@ def generate_maze(cols: int, rows: int) -> list[list[Cell]]:
         if height < 2 or width < 2:
             return
 
-        # Choose orientation: prefer dividing the longer axis
         horizontal = (height > width) or (height == width and random.random() < 0.5)
 
         if horizontal:
@@ -102,10 +88,6 @@ def generate_maze(cols: int, rows: int) -> list[list[Cell]]:
     divide(1, 1, rows - 2, cols - 2)
     return grid
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  Weighted graph helper — random weights on passable edges for Dijkstra realism
-# ══════════════════════════════════════════════════════════════════════════════
 def build_weights(grid, cols, rows):
     """Assign a random integer weight 1-9 to every passable cell."""
     weights = {}
@@ -115,10 +97,6 @@ def build_weights(grid, cols, rows):
                 weights[(r, c)] = random.randint(1, 9)
     return weights
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  Dijkstra's Algorithm — yields intermediate states for animation
-# ══════════════════════════════════════════════════════════════════════════════
 DIRS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 def dijkstra(grid, weights, start, end, cols, rows):
@@ -173,10 +151,6 @@ def reconstruct_path(prev, start, end):
     path.reverse()
     return path if path[0] == start else []
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  Drawing helpers
-# ══════════════════════════════════════════════════════════════════════════════
 def cell_rect(r, c):
     return pygame.Rect(c * CELL, r * CELL, CELL, CELL)
 
@@ -318,10 +292,6 @@ def draw_panel(surf, state_info, elapsed, path_cost, path_len, nodes_visited,
                         True, COST_COL if show_weights else TEXT_DIM)
     surf.blit(wt, (px + 18, y))
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  Main game loop
-# ══════════════════════════════════════════════════════════════════════════════
 def find_free_cell(grid, near_row, near_col):
     """Find nearest free cell to the given position."""
     for dr in range(ROWS):
@@ -377,7 +347,6 @@ def main():
     while running:
         now = pygame.time.get_ticks()
 
-        # ── Events ──────────────────────────────────────────────────────────
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -427,7 +396,6 @@ def main():
                     path_len = len(path)
                     status = "Done!" if path else "No path found"
 
-        # ── Step animation ───────────────────────────────────────────────────
         if animating and gen is not None and (now - last_step) >= VIZ_DELAY:
             last_step = now
             try:
@@ -442,7 +410,6 @@ def main():
                 path_len = len(path)
                 status = "Done!" if path else "No path found"
 
-        # ── Render ───────────────────────────────────────────────────────────
         screen.fill(BG)
 
         # Grid surface (clipped)
